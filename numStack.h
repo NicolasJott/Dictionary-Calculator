@@ -3,23 +3,23 @@
 #include <stdexcept>
 
 const int STACK_SIZE = 100;
-typedef int numStackType;
+typedef int NumStackType;
 
-class numStack {
+class NumStack {
 private:
-    numStackType
+    NumStackType
             data[STACK_SIZE];
     int
             count;
 public:
-    numStack(void) { count = 0; }
-    ~numStack(void) { }
+    NumStack(void) { count = 0; }
+    ~NumStack(void) { }
 
     void clear(void) { count = 0; }
     int size(void) { return count; }
     bool isEmpty(void) { return count == 0; }
 
-    void push(const numStackType &d) {
+    void push(const NumStackType &d) {
 
         if (count == STACK_SIZE)
             throw std::overflow_error("Stack is full");
@@ -29,7 +29,7 @@ public:
         count++;
     }
 
-    numStackType pop(void) {
+    NumStackType pop(void) {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
@@ -40,7 +40,7 @@ public:
 
     }
 
-    numStackType peek(void) {
+    NumStackType peek(void) {
 
         if (!count)
             throw std::underflow_error("Stack is empty");

@@ -3,23 +3,23 @@
 #include <stdexcept>
 #include <cstring>
 
-typedef char opStackType;
+typedef char OpStackType;
 
-class opStack {
+class OpStack {
 private:
-    opStackType
+    OpStackType
             data[STACK_SIZE];
     int
             count;
 public:
-    opStack(void) { count = 0; }
-    ~opStack(void) = default;
+    OpStack(void) { count = 0; }
+    ~OpStack(void) = default;
 
     void clear(void) { count = 0; }
     int size(void) { return count; }
     bool isEmpty(void) { return count == 0; }
 
-    void push(const opStackType &d) {
+    void push(const OpStackType &d) {
 
         if (count == STACK_SIZE)
             throw std::overflow_error("Stack is full");
@@ -29,7 +29,7 @@ public:
         count++;
     }
 
-    opStackType pop(void) {
+    OpStackType pop(void) {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
@@ -40,7 +40,7 @@ public:
 
     }
 
-    opStackType peek(void) {
+    OpStackType peek(void) {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
