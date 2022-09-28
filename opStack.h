@@ -1,25 +1,25 @@
 #ifndef PROJECT2_OPSTACK_H
 #define PROJECT2_OPSTACK_H
 #include <stdexcept>
+#include <cstring>
 
-const int STACK_SIZE = 100;
-typedef int StackType;
+typedef char opStackType;
 
 class opStack {
 private:
-    StackType
+    opStackType
             data[STACK_SIZE];
     int
             count;
 public:
     opStack(void) { count = 0; }
-    ~opStack(void) { }
+    ~opStack(void) = default;
 
     void clear(void) { count = 0; }
     int size(void) { return count; }
     bool isEmpty(void) { return count == 0; }
 
-    void push(const StackType &d) {
+    void push(const opStackType &d) {
 
         if (count == STACK_SIZE)
             throw std::overflow_error("Stack is full");
@@ -29,7 +29,7 @@ public:
         count++;
     }
 
-    StackType pop(void) {
+    opStackType pop(void) {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
@@ -40,7 +40,7 @@ public:
 
     }
 
-    StackType peek(void) {
+    opStackType peek(void) {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
