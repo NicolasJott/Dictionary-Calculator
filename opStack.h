@@ -12,35 +12,34 @@ private:
     int
             count;
 public:
-    OpStack(void) { count = 0; }
-    ~OpStack(void) = default;
+    OpStack(char) { count = 0; }
+    ~OpStack() = default;
 
-    void clear(void) { count = 0; }
-    int size(void) { return count; }
-    bool isEmpty(void) { return count == 0; }
+    void clear(char) { count = 0; }
+    int size(char) { return count; }
+    bool isEmpty(char) { return count == 0; }
 
     void push(const OpStackType &d) {
 
         if (count == STACK_SIZE)
             throw std::overflow_error("Stack is full");
 
-        data[count] = d;
+        data[count++] = d;
 
-        count++;
     }
 
-    OpStackType pop(void) {
+    OpStackType pop() {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
 
-        count--;
 
-        return data[count];
+
+        return data[count--];
 
     }
 
-    OpStackType peek(void) {
+    OpStackType peek() {
 
         if (!count)
             throw std::underflow_error("Stack is empty");

@@ -12,12 +12,12 @@ private:
     int
             count;
 public:
-    NumStack(void) { count = 0; }
-    ~NumStack(void) { }
+    NumStack(int) { count = 0; }
+    ~NumStack() { }
 
-    void clear(void) { count = 0; }
-    int size(void) { return count; }
-    bool isEmpty(void) { return count == 0; }
+    void clear(int) { count = 0; }
+    int size(int) { return count; }
+    bool isEmpty(int) { return count == 0; }
 
     void push(const NumStackType &d) {
 
@@ -29,7 +29,7 @@ public:
         count++;
     }
 
-    NumStackType pop(void) {
+    NumStackType pop() {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
@@ -40,7 +40,7 @@ public:
 
     }
 
-    NumStackType peek(void) {
+    NumStackType peek() {
 
         if (!count)
             throw std::underflow_error("Stack is empty");
