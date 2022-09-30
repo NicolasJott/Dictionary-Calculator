@@ -5,6 +5,7 @@
 
 NumStack nums;
 OpStack chars;
+Dictionary structure;
 
 void Evaluate(std::string s) {
    nums.clear();
@@ -17,24 +18,31 @@ void Evaluate(std::string s) {
            std::stringstream num(s[first]);
            Fraction lhs;
            num >> lhs;
+           structure.add(s, lhs);
            nums.push(lhs);
            first++;
        } else if (isalpha(s[first])) {
 
-       } else if (s[first] == s.find('(')){
+       } else if (s[first] == '('){
            chars.push(s[first]);
            first++;
 
-       } else if (s[first] == s.find(')')) {
-           while (chars.size() != '(') {
-
+       } else if (s[first] == ')') {
+           while (chars.peek() != '(') {
+               chars.peek();
            }
+           chars.pop();
+           first++;
        } else if (s[first] == s.find_first_of('+-*/')) {
 
        } else {
            first++;
        }
    }
+   while (chars.size() != '$') {
+       chars.peek();
+   }
+   std::cout << nums.size() << std::endl;
 
 }
 
