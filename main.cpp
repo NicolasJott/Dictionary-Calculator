@@ -1,24 +1,47 @@
 #include "dictionary.h"
 #include "numStack.h"
 #include "opStack.h"
+#include <sstream>
+
+NumStack nums;
+OpStack chars;
+
+void Evaluate(std::string s) {
+   nums.clear();
+   chars.clear();
+   chars.push('$');
+   size_t first {1};
+
+   while (first < s.length()) {
+       if (isdigit(s[first])) {
+           std::stringstream num(s[first]);
+           Fraction lhs;
+           num >> lhs;
+           nums.push(lhs);
+           first++;
+       } else if (isalpha(s[first])) {
+
+       } else if (s[first] == s.find('(')){
+           chars.push(s[first]);
+           first++;
+
+       } else if (s[first] == s.find(')')) {
+           while (chars.size() != '(') {
+
+           }
+       } else if (s[first] == s.find_first_of('+-*/')) {
+
+       } else {
+           first++;
+       }
+   }
+
+}
+
 
 int main() {
-    Dictionary
-        vars;
-    Fraction
-        f(2,3);
-    try {
-        vars.add("foo", f);
-    }
-    catch (const std::overflow_error &e) {
-        std::cout << "Caught an overflow error" << std::endl;
-        std::cout << "Message: " << e.what() << std::endl;
-    }
-    catch (const std::domain_error &e) {
-        std::cout << "Caught a domain error, which shouldn't happen" << std::endl;
-    }
-    catch (...) {
-        std::cout << "Caught some generic exception" << std::endl;
-    }
+    std::string s;
+    std::cin >> s;
+
     return 0;
 }
