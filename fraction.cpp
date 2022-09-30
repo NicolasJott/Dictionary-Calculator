@@ -90,8 +90,15 @@ Fraction& Fraction::operator = (Fraction rhs) {
     numerator = rhs.numerator;
     denominator = rhs.denominator;
     return *this;
-
 }
+
+Fraction& Fraction::operator = (int rhs) {
+    numerator = rhs;
+    denominator = 1;
+
+    return *this;
+}
+
 
 bool Fraction::operator == (Fraction rhs) {
     return numerator == rhs.numerator && denominator == rhs.denominator;
