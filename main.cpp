@@ -2,26 +2,36 @@
 #include "numStack.h"
 #include "opStack.h"
 #include <sstream>
+#include <map>
 
 NumStack nums;
 OpStack chars;
-Dictionary structure;
+Dictionary dictionary;
+std::map<std::string, Fraction> structure;
 
 void Evaluate(std::string s) {
    nums.clear();
    chars.clear();
    chars.push('$');
-   size_t first {1};
+   unsigned int first = 1;
 
    while (first < s.length()) {
        if (isdigit(s[first])) {
+           std::string digit(1, s[first]);
            std::stringstream num(s[first]);
            Fraction lhs;
            num >> lhs;
-           structure.add(s, lhs);
+           structure.insert({digit, lhs});
            nums.push(lhs);
            first++;
        } else if (isalpha(s[first])) {
+           std::string name(1, s[first]);
+           std::stringstream num(s[first]);
+           Fraction lhs;
+           num >> lhs;
+           structure.insert({name, lhs});
+           nums.push(lhs);
+           first++;
 
        } else if (s[first] == '('){
            chars.push(s[first]);
@@ -48,8 +58,7 @@ void Evaluate(std::string s) {
 
 
 int main() {
-    std::string s;
-    std::cin >> s;
-
+    std::string s = "4 + 5";
+    Evaluate(s);
     return 0;
 }
