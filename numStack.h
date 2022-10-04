@@ -3,49 +3,49 @@
 #include <stdexcept>
 
 const int STACK_SIZE = 100;
-typedef int NumStackType;
+typedef Fraction NumStackType;
 
 class NumStack {
 private:
     NumStackType
             data[STACK_SIZE];
     int
-            count;
+            top;
 public:
-    NumStack(int) { count = 0; }
-    ~NumStack() { }
+    NumStack() { top = 0; }
+    ~NumStack() = default;
 
-    void clear(int) { count = 0; }
-    int size(int) { return count; }
-    bool isEmpty(int) { return count == 0; }
+    void clear() { top = 0; }
+    [[nodiscard]] int size() const { return top; }
+    [[nodiscard]] bool isEmpty() const { return top == 0; }
 
     void push(const NumStackType &d) {
 
-        if (count == STACK_SIZE)
+        if (top == STACK_SIZE)
             throw std::overflow_error("Stack is full");
 
-        data[count] = d;
+        data[top] = d;
 
-        count++;
+        top++;
     }
 
     NumStackType pop() {
 
-        if (!count)
+        if (!top)
             throw std::underflow_error("Stack is empty");
 
-        count--;
+        top--;
 
-        return data[count];
+        return data[top];
 
     }
 
     NumStackType peek() {
 
-        if (!count)
+        if (!top)
             throw std::underflow_error("Stack is empty");
 
-        return data[count-1];
+        return data[top-1];
     }
 };
 #endif //PROJECT2_NUMSTACK_H
