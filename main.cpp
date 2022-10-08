@@ -31,6 +31,17 @@ bool Precedence(char a , char b) {
             return false;
     }
 }
+
+void Operation() {
+    char op = opStack.pop();
+    input.fraction = numStack.pop();
+    if (op == '=') {
+            dictionary.add(input.string, input.fraction);
+    } else if (op == '+' or op == '-' or op == '*' or op == '/' ) {
+
+    }
+}
+
 void Evaluate(std::string s) {
    numStack.clear();
    opStack.clear();
@@ -40,16 +51,14 @@ void Evaluate(std::string s) {
    while (first < s.length()) {
        if (isdigit(s[first])) {
            std::string digit(1, s[first]);
-           std::stringstream num(s[first]);
+           std::stringstream num(digit);
            Fraction lhs;
            num >> lhs;
            input.string = s[first];
            input.fraction = lhs;
            dictionary.add(input.string, input.fraction);
            numStack.push(lhs);
-           while (s[first] != ' ') {
-               first++;
-           }
+           first++;
        } else if (isalpha(s[first])) {
            std::string name;
            while (s[first] != ' ') {
@@ -64,11 +73,11 @@ void Evaluate(std::string s) {
 
        } else if (s[first] == ')') {
            while (opStack.peek() != '(') {
-               opStack.peek();
+               opStack.pop();
            }
            opStack.pop();
            first++;
-       } else if (s[first] == s.find_first_of('+-*/')) {
+       } else if (s[first] == '+' or s[first] == '-' or s[first] == '*' or s[first] == '/') {
            bool precedence = Precedence(opStack.pop(), s[first]);
            while (precedence) {
                opStack.peek();
@@ -86,5 +95,8 @@ void Evaluate(std::string s) {
 }
 
 int main() {
+    std::string String = "(4 + 5) * 4";
+    Evaluate(String);
     return 0;
+
 }
