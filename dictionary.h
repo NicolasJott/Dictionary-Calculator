@@ -11,6 +11,8 @@ enum DictionaryStatus {
     DELETED
 };
 
+typedef Fraction DictionaryType;
+
 const uint32_t
     TABLE_SIZE = 127,
     MAX_ITEMS = 101;
@@ -25,7 +27,7 @@ public:
 
     void clear();
 
-    void add(const std::string &, const Fraction);
+    void add(const std::string &, const DictionaryType);
 
     Fraction search(const std::string &);
 
@@ -33,7 +35,7 @@ public:
 private:
     std::string
         keys[TABLE_SIZE];
-    Fraction
+    DictionaryType
         values[TABLE_SIZE];
     DictionaryStatus
         status[TABLE_SIZE];

@@ -19,20 +19,13 @@ void Dictionary::clear() {
     nItems = 0;
 }
 
-void Dictionary::add(const std::string &key, const Fraction value) {
+void Dictionary::add(const std::string &key, const DictionaryType value) {
     // hash key to get a position
     uint32_t
         pos = hash(key) % TABLE_SIZE;
 
     // sequential search for key
     while (status[pos] != UNUSED) {
-        for (size_t i =0; i < TABLE_SIZE; i++)
-            if (keys[i] == key) {
-                status[pos] = IN_USE;
-            } else {
-                status[pos] = UNUSED;
-            }
-
         // if key found, update value and return
         if (status[pos] == IN_USE && keys[pos] == key) {
             values[pos] = value;
@@ -43,24 +36,19 @@ void Dictionary::add(const std::string &key, const Fraction value) {
 
 
     // not found... is table too full? If so, exception
-    throw std::overflow_error("Dictionary is full.");
-
-    // not too full... search again stopping at first open spot
-    while (status[pos] != UNUSED) {
-        for (size_t i = 0; i < TABLE_SIZE; i++)
-            if (keys[i] == key) {
-                status[pos] = IN_USE;
-            } else {
-                status[pos] = UNUSED;
-            }
-
-        // if key found, update value and return
-        if (status[pos] == IN_USE && keys[pos] == key) {
-            values[pos] = value;
-            return;
-        }
+    if (nItems == MAX_ITEMS)
+        throw std::overflow_error("Dictionary is full.");
+    else {
+        while (status[pos] != UNUSED) {
+            // not too full... search again stopping at first open spot
+            pos = (pos + 1) % TABLE_SIZE;
     }
-    // put key here. increment nItems and done
+        // put key here. increment nItems and done
+        keys[pos] = key;
+        values[pos] = value;
+        status[pos] = IN_USE;
+        nItems++;
+    }
 }
 
 Fraction Dictionary::search(const std::string &key) {
@@ -69,16 +57,11 @@ Fraction Dictionary::search(const std::string &key) {
             pos = hash(key) % TABLE_SIZE;
     // sequential search for key; stop at unused
     while (status[pos] != UNUSED) {
-        for (size_t i = 0; i < TABLE_SIZE; i++)
-            if (keys[i] == key) {
-                status[pos] = IN_USE;
-            } else {
-                status[pos] = UNUSED;
-            }
         // if key found, return value
         if (status[pos] == IN_USE && keys[pos] == key) {
             return values[pos];
         }
+        pos = (pos + 1) % TABLE_SIZE;
     }
     // if we get here, key isn't here, throw exception
     throw std::domain_error("Key not found.");
@@ -91,16 +74,12 @@ void Dictionary::remove(const std::string &key) {
             pos = hash(key) % TABLE_SIZE;
     // sequential search for key; stop at unused
     while (status[pos] != UNUSED) {
-        for (size_t i = 0; i < TABLE_SIZE; i++)
-            if (keys[i] == key) {
-                status[pos] = UNUSED;
-            }
         // if key found, set status to deleted and return
         if (status[pos] == IN_USE && keys[pos] == key) {
-            values[pos] = 0;
             status[pos] = DELETED;
             return;
         }
+        pos = (pos + 1) % TABLE_SIZE;
     }
     // if we get here, key isn't here, throw exception
     throw std::domain_error("Key not found.");

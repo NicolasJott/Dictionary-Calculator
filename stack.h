@@ -1,25 +1,30 @@
-#ifndef PROJECT2_NUMSTACK_H
-#define PROJECT2_NUMSTACK_H
+#ifndef PROJECT2_STACK_H
+#define PROJECT2_STACK_H
 #include <stdexcept>
 
 const int STACK_SIZE = 100;
-typedef Fraction NumStackType;
 
-class NumStack {
+struct Input{
+    std::string string;
+    Fraction fraction;
+};
+
+template<class StackType>
+class Stack {
 private:
-    NumStackType
+    StackType
             data[STACK_SIZE];
     int
             top;
 public:
-    NumStack() { top = 0; }
-    ~NumStack() = default;
+    Stack() { top = 0; }
+    ~Stack() = default;
 
     void clear() { top = 0; }
     [[nodiscard]] int size() const { return top; }
     [[nodiscard]] bool isEmpty() const { return top == 0; }
 
-    void push(const NumStackType &d) {
+    void push(const StackType &d) {
 
         if (top == STACK_SIZE)
             throw std::overflow_error("Stack is full");
@@ -29,7 +34,7 @@ public:
         top++;
     }
 
-    NumStackType pop() {
+    StackType pop() {
 
         if (!top)
             throw std::underflow_error("Stack is empty");
@@ -40,7 +45,7 @@ public:
 
     }
 
-    NumStackType peek() {
+    StackType peek() {
 
         if (!top)
             throw std::underflow_error("Stack is empty");
@@ -48,4 +53,4 @@ public:
         return data[top-1];
     }
 };
-#endif //PROJECT2_NUMSTACK_H
+#endif //PROJECT2_STACK_H

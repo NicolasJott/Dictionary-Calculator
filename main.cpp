@@ -1,18 +1,40 @@
 #include "dictionary.h"
-#include "numStack.h"
-#include "opStack.h"
+#include "stack.h"
 #include <sstream>
-#include <map>
 
-NumStack nums;
-OpStack chars;
+Stack<Fraction> numStack;
+Stack<char> opStack;
 Dictionary dictionary;
-std::map<std::string, Fraction> structure;
+Input input;
 
+bool Precedence(char a , char b) {
+    if (a == '*' or a == '/'){
+        if (b == '*' or b == '/')
+            return true;
+        else if ( b == '+' or b == '-')
+            return true;
+        else if (b == '=')
+            return true;
+    } else if (a == '+' or a == '-') {
+        if (b == '*' or b == '/')
+            return false;
+        else if (b == '+' or b == '-')
+            return true;
+        else if (b == '=')
+            return true;
+    } else if (a == '=' or a == '(' or a == '$') {
+        if (b == '*' or b == '/')
+            return false;
+        else if (b == '+' or b == '-')
+            return false;
+        else if (b == '=')
+            return false;
+    }
+}
 void Evaluate(std::string s) {
-   nums.clear();
-   chars.clear();
-   chars.push('$');
+   numStack.clear();
+   opStack.clear();
+   opStack.push('$');
    unsigned int first = 1;
 
    while (first < s.length()) {
@@ -21,44 +43,48 @@ void Evaluate(std::string s) {
            std::stringstream num(s[first]);
            Fraction lhs;
            num >> lhs;
-           structure.insert({digit, lhs});
-           nums.push(lhs);
-           first++;
+           input.string = s[first];
+           input.fraction = lhs;
+           dictionary.add(input.string, input.fraction);
+           numStack.push(lhs);
+           while (s[first] != ' ') {
+               first++;
+           }
        } else if (isalpha(s[first])) {
-           std::string name(1, s[first]);
-           std::stringstream num(s[first]);
-           Fraction lhs;
-           num >> lhs;
-           structure.insert({name, lhs});
-           nums.push(lhs);
-           first++;
-
+           std::string name;
+           while (s[first] != ' ') {
+               name += s[first];
+               first++;
+           }
+           input.string = name;
+           dictionary.add(input.string, input.fraction);
        } else if (s[first] == '('){
-           chars.push(s[first]);
+           opStack.push(s[first]);
            first++;
 
        } else if (s[first] == ')') {
-           while (chars.peek() != '(') {
-               chars.peek();
+           while (opStack.peek() != '(') {
+               opStack.peek();
            }
-           chars.pop();
+           opStack.pop();
            first++;
        } else if (s[first] == s.find_first_of('+-*/')) {
-
+           bool precedence = Precedence(opStack.pop(), s[first]);
+           while (precedence) {
+               opStack.peek();
+           }
+           opStack.push(s[first]);
+           first++;
        } else {
            first++;
        }
    }
-   while (chars.size() != '$') {
-       chars.peek();
+   while (opStack.size() != '$') {
+       opStack.peek();
    }
-   std::cout << nums.size() << std::endl;
-
+   std::cout << numStack.size() << std::endl;
 }
 
-
 int main() {
-    std::string s = "4 + 5";
-    Evaluate(s);
     return 0;
 }
