@@ -10,57 +10,40 @@ Input input;
 
 bool Precedence(char a , char b) {
     if (a == '*' or a == '/'){
-        if (b == '*' or b == '/')
-            return true;
-        else if ( b == '+' or b == '-')
-            return true;
-        else if (b == '=')
             return true;
     } else if (a == '+' or a == '-') {
         if (b == '*' or b == '/')
             return false;
-        else if (b == '+' or b == '-')
-            return true;
-        else if (b == '=')
+        else
             return true;
     } else if (a == '=' or a == '(' or a == '$') {
-        if (b == '*' or b == '/')
-            return false;
-        else if (b == '+' or b == '-')
-            return false;
-        else if (b == '=')
-            return false;
+        return false;
     }
     return false;
 }
 
 void Operation() {
     char op = opStack.pop();
-    Fraction rhs = numStack.pop();
-    Fraction lhs = numStack.pop();
-    Fraction newFraction;
     if (op == '=') {
-        char otherOp = opStack.pop();
-        if (otherOp == '+') {
-            newFraction = rhs + lhs;
-        } else if (otherOp == '-') {
-            newFraction = rhs - lhs;
-        } else if (otherOp == '*') {
-            newFraction = rhs * lhs;
-        } else if (otherOp == '/') {
-            newFraction = rhs / lhs;
+        input.fraction = numStack.pop();
+        dictionary.add(input.string,input.fraction);
+    } else {
+        Input rhs, lhs;
+        rhs.fraction = numStack.pop();
+        lhs.fraction = numStack.pop();
+        Fraction newFraction;
+        if (op == '+') {
+            newFraction = rhs.fraction + lhs.fraction;
+        } else if (op == '-') {
+            newFraction = rhs.fraction - lhs.fraction;
+        } else if (op == '*') {
+            newFraction = rhs.fraction * lhs.fraction;
+        } else if (op == '/') {
+            newFraction = lhs.fraction / rhs.fraction;
         }
-        dictionary.add(input.string, newFraction);
-    } else if (op == '+') {
-        newFraction = rhs + lhs;
-    } else if (op == '-'){
-        newFraction = rhs - lhs;
-    } else if (op == '*'){
-        newFraction = rhs * lhs;
-    } else if (op == '/' ) {
-        newFraction = lhs / rhs;
+        numStack.push(newFraction);
     }
-    numStack.push(newFraction);
+
 }
 
 void Evaluate(std::string s) {
@@ -75,7 +58,9 @@ void Evaluate(std::string s) {
            Fraction lhs;
            int temp = 0;
            while (s[first] != ' ') {
-               if (first == s.length() - 1) {
+               if (s[first] == ')'){
+                   break;
+               } else if (first == s.length() - 1) {
                    ss << s[first];
                    first++;
                    break;
@@ -83,7 +68,6 @@ void Evaluate(std::string s) {
                    ss << s[first];
                    first++;
                }
-
            }
            ss >> temp;
            lhs = temp;
@@ -95,6 +79,7 @@ void Evaluate(std::string s) {
                first++;
            }
            input.string = name;
+           dictionary.add(input.string, input.fraction);
        } else if (s[first] == '('){
            opStack.push('(');
            first++;
@@ -118,11 +103,18 @@ void Evaluate(std::string s) {
    while (opStack.size() != 1){
        Operation();
    }
-   std::cout << numStack.pop() << std::endl;
+   if (numStack.isEmpty()){
+       Fraction var = dictionary.search(input.string);
+       std::cout << input.string << " = " << var << std::endl;
+   } else {
+       std::cout << numStack.pop() << std::endl;
+   }
+
+
 }
 
 int main() {
-    std::string String = "10 * 5 + 4";
+    std::string String = " randomVariable = 5 * 4 + 6";
     Evaluate(String);
     return 0;
 
