@@ -17,12 +17,12 @@ private:
     int
             top;
 public:
-    Stack() { top = 0; }
-    ~Stack() = default;
+    Stack(void) { top = 0; }
+    ~Stack(void) = default;
 
-    void clear() { top = 0; }
-    [[nodiscard]] int size() const { return top; }
-    [[nodiscard]] bool isEmpty() const { return top == 0; }
+    void clear(void) { top = 0; }
+    int size(void) const { return top; }
+    bool isEmpty(void) const { return top == 0; }
 
     void push(const StackType &d) {
 
@@ -34,7 +34,7 @@ public:
         top++;
     }
 
-    StackType pop() {
+    StackType pop(void) {
 
         if (!top)
             throw std::underflow_error("Stack is empty");
@@ -45,7 +45,7 @@ public:
 
     }
 
-    StackType peek() {
+    StackType peek(void) {
 
         if (!top)
             throw std::underflow_error("Stack is empty");
