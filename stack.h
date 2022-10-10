@@ -2,7 +2,7 @@
 #define PROJECT2_STACK_H
 #include <stdexcept>
 
-const int STACK_SIZE = 100;
+const int STACK_SIZE = 23;
 
 struct Input{
     std::string string;
