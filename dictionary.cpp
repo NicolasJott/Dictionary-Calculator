@@ -84,6 +84,18 @@ void Dictionary::remove(const std::string &key) {
     // if we get here, key isn't here, throw exception
     throw std::domain_error("Key not found.");
 
-
-
+}
+bool Dictionary::contains(const std::string &key) {
+    uint32_t
+            pos = hash(key) % TABLE_SIZE;
+    // sequential search for key; stop at unused
+    while (status[pos] != UNUSED) {
+        // if key found, set status to deleted and return
+        if (status[pos] == IN_USE && keys[pos] == key) {
+            return true;
+        }
+        pos = (pos + 1) % TABLE_SIZE;
+    }
+    // if we get here, key isn't here, throw exception
+    return false;
 }
