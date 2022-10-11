@@ -1,11 +1,11 @@
 #include "dictionary.h"
 #include "stack.h"
 #include <sstream>
+#include <cstring>
 
-Stack<Fraction> numStack;
+Stack<Input> numStack;
 Stack<char> opStack;
 Dictionary dictionary;
-Input input;
 
 
 bool Precedence(char a , char b) {
@@ -25,21 +25,22 @@ bool Precedence(char a , char b) {
 void Operation() {
     char op = opStack.pop();
     if (op == '=') {
-        input.fraction = numStack.pop();
-        dictionary.add(input.string,input.fraction);
+        Input rhs = numStack.pop();
+        Input equal = numStack.pop();
+        dictionary.add(equal.string,rhs.fraction);
+        numStack.push(rhs);
     } else {
-        Input rhs, lhs;
-        rhs.fraction = numStack.pop();
-        lhs.fraction = numStack.pop();
-        Fraction newFraction;
+        Input rhs, lhs, newFraction;
+        rhs = numStack.pop();
+        lhs = numStack.pop();
         if (op == '+') {
-            newFraction = rhs.fraction + lhs.fraction;
+            newFraction.fraction = lhs.fraction + rhs.fraction;
         } else if (op == '-') {
-            newFraction = rhs.fraction - lhs.fraction;
+            newFraction.fraction = lhs.fraction - rhs.fraction;
         } else if (op == '*') {
-            newFraction = rhs.fraction * lhs.fraction;
+            newFraction.fraction = lhs.fraction * rhs.fraction;
         } else if (op == '/') {
-            newFraction = lhs.fraction / rhs.fraction;
+            newFraction.fraction = lhs.fraction / rhs.fraction;
         }
         numStack.push(newFraction);
     }
@@ -50,36 +51,57 @@ void Evaluate(std::string s) {
    numStack.clear();
    opStack.clear();
    opStack.push('$');
+
    unsigned int first = 0;
 
    while (first < s.length()) {
        if (isdigit(s[first])) {
+           Input fraction;
            std::stringstream ss;
-           Fraction lhs;
-           int temp = 0;
-           while (s[first] != ' ') {
-               if (s[first] == ')'){
-                   break;
-               } else if (first == s.length() - 1) {
-                   ss << s[first];
-                   first++;
-                   break;
-               }else{
-                   ss << s[first];
-                   first++;
+           Fraction num;
+           int temp;
+           std::string str;
+           if (s[first] != ' ') {
+               while (s[first] != ' ' && s[first] != ')'){
+                   if (s[first] == '+' or s[first] == '-' or s[first] == '*' or s[first] == '/' or s[first] == '=' or s[first] == '\0') {
+                       break;
+                   } else {
+                       str += s[first];
+                       first++;
+                   }
                }
-           }
-           ss >> temp;
-           lhs = temp;
-           numStack.push(lhs);
-       } else if (isalpha(s[first])) {
-           std::string name;
-           while (s[first] != ' ') {
-               name += s[first];
+           } else {
+               str = s[first];
                first++;
            }
-           input.string = name;
-           dictionary.add(input.string, input.fraction);
+
+           ss << str;
+           ss >> temp;
+           num = temp;
+           fraction.fraction = num;
+           fraction.string = str;
+           numStack.push(fraction);
+       } else if (isalpha(s[first])) {
+           Input name;
+           if (s[first] != ' ') {
+               while (s[first] != ' ' && s[first] != ')') {
+                   if (s[first] == '+' or s[first] == '-' or s[first] == '*' or s[first] == '/' or s[first] == '=' or s[first] == '\0') {
+                       break;
+                   } else {
+                       name.string += s[first];
+                       first++;
+                   }
+               }
+           } else {
+               name.string = s[first];
+               first++;
+               }
+           if (dictionary.contains(name.string)) {
+               name.fraction = dictionary.search(name.string);
+           } else {
+               dictionary.add(name.string, name.fraction);
+           }
+           numStack.push(name);
        } else if (s[first] == '('){
            opStack.push('(');
            first++;
@@ -103,19 +125,28 @@ void Evaluate(std::string s) {
    while (opStack.size() != 1){
        Operation();
    }
-   if (numStack.isEmpty()){
-       Fraction var = dictionary.search(input.string);
-       std::cout << input.string << " = " << var << std::endl;
-   } else {
-       std::cout << numStack.pop() << std::endl;
-   }
-
-
+   Input output = numStack.pop();
+   std::cout << output.fraction << std::endl;
 }
 
+
 int main() {
-    std::string String = " randomVariable = 5 * 4 + 6";
-    Evaluate(String);
+    int variableCount, numExpressions;
+    std::string expression;
+        std::cout << "Please enter how many expressions you wish to answer: ";
+        std:: cin >> numExpressions;
+            for (size_t i = 0; i < numExpressions; i++) {
+                try {
+                    std::getline(std::cin >> std::ws, expression);
+                    Evaluate(expression);
+                } catch (const std::overflow_error &e) {
+                    std::cout << "You exceeded the amount of variables able to be stored in the dictionary (100)." << std::endl;
+                    std::cout << " Overflow Error: " << e.what() << std::endl;
+                }
+
+            }
+
+
     return 0;
 
 }
