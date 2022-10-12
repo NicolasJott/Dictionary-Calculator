@@ -33,7 +33,6 @@ public:
 
     void remove(const std::string &);
 
-    bool contains(const std::string &);
 private:
     std::string
         keys[TABLE_SIZE];
