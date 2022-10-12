@@ -1,13 +1,12 @@
 #include "dictionary.h"
 #include "stack.h"
 #include <sstream>
-#include <cstring>
 
 Stack<Input> numStack;
 Stack<char> opStack;
 Dictionary dictionary;
 
-
+// Function that shows operator precedence over the previous stacked operator
 bool Precedence(char a , char b) {
     if (a == '*' or a == '/'){
             return true;
@@ -22,9 +21,10 @@ bool Precedence(char a , char b) {
     return false;
 }
 
+// Top Operation
 void Operation() {
     char op = opStack.pop();
-    if (op == '=') {
+    if (op == '=') {                                                    // This branch serves to add a value to a variable
         Input rhs = numStack.pop();
         Input equal = numStack.pop();
         dictionary.add(equal.string,rhs.fraction);
@@ -74,7 +74,6 @@ void Evaluate(std::string s) {
                str = s[first];
                first++;
            }
-
            ss << str;
            ss >> temp;
            num = temp;
@@ -129,23 +128,25 @@ void Evaluate(std::string s) {
    std::cout << output.fraction << std::endl;
 }
 
-
 int main() {
     int variableCount, numExpressions;
     std::string expression;
-        std::cout << "Please enter how many expressions you wish to answer: ";
-        std:: cin >> numExpressions;
-            for (size_t i = 0; i < numExpressions; i++) {
+
+    std::cout << "Enter an arithmetic expression. eg. x = 20 * (y = 4): ";
+            while (expression != "quit"){
                 try {
                     std::getline(std::cin >> std::ws, expression);
-                    Evaluate(expression);
+                    if (expression == "quit") {
+                        break;
+                    } else {
+                        Evaluate(expression);
+                        std::cout << "Enter another expression or type \"quit\" to quit: ";
+                    }
                 } catch (const std::overflow_error &e) {
                     std::cout << "You exceeded the amount of variables able to be stored in the dictionary (100)." << std::endl;
                     std::cout << " Overflow Error: " << e.what() << std::endl;
                 }
-
             }
-
 
     return 0;
 
