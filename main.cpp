@@ -95,11 +95,12 @@ void Evaluate(std::string s) {
                name.string = s[first];
                first++;
                }
-           if (dictionary.contains(name.string)) {
+           try {
                name.fraction = dictionary.search(name.string);
-           } else {
-               dictionary.add(name.string, name.fraction);
+           } catch (const std::domain_error &e) {
+                   dictionary.add(name.string, name.fraction);
            }
+
            numStack.push(name);
        } else if (s[first] == '('){
            opStack.push('(');
@@ -129,7 +130,7 @@ void Evaluate(std::string s) {
 }
 
 int main() {
-    int variableCount, numExpressions;
+
     std::string expression;
 
     std::cout << "Enter an arithmetic expression. eg. x = 20 * (y = 4): ";
