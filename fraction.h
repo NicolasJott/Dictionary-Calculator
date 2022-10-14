@@ -28,9 +28,10 @@ public:
     bool operator < (Fraction rhs);
     bool operator > (Fraction rhs);
 
+    Fraction operator * (int rhs);
+    Fraction operator + (int rhs);
     Fraction& operator = (int rhs);
-
-    bool operator == (char rhs);
+    Fraction operator - (int rhs);
 
     double getNum() const { return numerator; }
     double getDen() const { return denominator; }

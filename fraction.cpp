@@ -98,6 +98,33 @@ Fraction& Fraction::operator = (int rhs) {
 
     return *this;
 }
+Fraction Fraction::operator * (int rhs) {
+    int32_t
+            s, t;
+
+    s = numerator * rhs;
+    t = denominator;
+
+    return Fraction(s, t);
+}
+Fraction Fraction::operator + (int rhs) {
+    int32_t
+            s, t;
+
+    s = numerator + rhs * denominator;
+    t = denominator;
+
+    return Fraction(s, t);
+}
+Fraction Fraction::operator - (int rhs) {
+    int32_t
+            s, t;
+
+    s = numerator - rhs * denominator;
+    t = denominator;
+
+    return Fraction(s, t);
+}
 
 
 bool Fraction::operator == (Fraction rhs) {
