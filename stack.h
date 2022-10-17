@@ -4,9 +4,9 @@
 
 const int STACK_SIZE = 23;
 
-struct Input{
-    std::string string;
-    Fraction fraction;
+struct Value{
+    std::string name;
+    Fraction value;
 };
 
 template<class StackType>
