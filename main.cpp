@@ -1,6 +1,5 @@
 #include "dictionary.h"
 #include "stack.h"
-#include <sstream>
 
 Stack<Value> numStack;
 Stack<char> opStack;
@@ -101,11 +100,11 @@ void Evaluate(std::string s) {
            first++;
        }
    }
-   while (opStack.size() != 1){
+   while (opStack.size() != 1 && opStack.size() > 0){
        doOperation();
    }
    Value output = numStack.pop();
-   std::cout << "Answer: " <<  output.value << std::endl;
+   std::cout << "Result: " <<  output.value << std::endl;
 }
 
 int main() {
@@ -115,7 +114,7 @@ int main() {
     std::cout << "Enter an arithmetic expression. eg. x = 20 * (y = 4): ";
             while (expression != "quit"){
                 try {
-                    std::getline(std::cin >> std::ws, expression);
+                    std::getline(std::cin, expression);
                     if (expression == "quit") {
                         break;
                     } else {
@@ -125,7 +124,6 @@ int main() {
                 } catch (const std::overflow_error &e) {
                     std::cout << "Overflow Error: " << e.what() << std::endl;
                     std::cout << "You exceeded the amount of variables able to be stored in the dictionary (100)." << std::endl;
-
                 }
             }
 

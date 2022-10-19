@@ -2,7 +2,7 @@
 #define PROJECT2_STACK_H
 #include <stdexcept>
 
-const int STACK_SIZE = 23;
+const int STACK_SIZE = 17;
 
 struct Value{
     std::string name;
@@ -17,12 +17,12 @@ private:
     int
             top;
 public:
-    Stack(void) { top = 0; }
-    ~Stack(void) = default;
+    Stack() { top = 0; }
+    ~Stack() = default;
 
-    void clear(void) { top = 0; }
-    int size(void) const { return top; }
-    bool isEmpty(void) const { return top == 0; }
+    void clear() { top = 0; }
+    int size() const { return top; }
+    bool isEmpty() const { return top == 0; }
 
     void push(const StackType &d) {
 
