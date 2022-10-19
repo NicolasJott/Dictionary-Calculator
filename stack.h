@@ -34,7 +34,7 @@ public:
         top++;
     }
 
-    StackType pop(void) {
+    StackType pop() {
 
         if (!top)
             throw std::underflow_error("Stack is empty");
@@ -45,7 +45,7 @@ public:
 
     }
 
-    StackType peek(void) {
+    StackType peek() {
 
         if (!top)
             throw std::underflow_error("Stack is empty");

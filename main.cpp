@@ -27,7 +27,6 @@ void doOperation() {
     if (op == '=') {                                                    // This branch serves to add a value to a variable
         Value rhs = numStack.pop();
         Value equal = numStack.pop();
-
         if (equal.name.empty()){                                       // This if statement checks to see if a name gets popped before a fraction eg, 4=x
             dictionary.add(rhs.name, equal.value);
             numStack.push(equal);
@@ -75,7 +74,7 @@ void Evaluate(std::string s) {
                first++;
            }
            try {
-               number.value = dictionary.search(number.name);                                           // if name exists in dictionary, update the value to this new value
+               number.value = dictionary.search(number.name);                                           // if name exists in dictionary, update the structure value to the stored value
            } catch (const std::domain_error&) {
                dictionary.add(number.name, number.value);                                               // if not, add name to dictionary with placeholder value
            }
@@ -100,7 +99,7 @@ void Evaluate(std::string s) {
            first++;
        }
    }
-   while (opStack.size() != 1 && opStack.size() > 0){
+   while (opStack.peek() != '$'){                                                   // Will call doOperation() until top of opStack is == '$';
        doOperation();
    }
    Value output = numStack.pop();
@@ -121,7 +120,7 @@ int main() {
                         Evaluate(expression);
                         std::cout << "Enter another expression or type \"quit\" to quit: ";
                     }
-                } catch (const std::overflow_error &e) {
+                } catch (const std::overflow_error &e) {                            // Catches if more dictionary is full
                     std::cout << "Overflow Error: " << e.what() << std::endl;
                     std::cout << "You exceeded the amount of variables able to be stored in the dictionary (100)." << std::endl;
                 }
