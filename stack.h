@@ -3,12 +3,6 @@
 #include <stdexcept>
 
 const int STACK_SIZE = 17;
-
-struct Value{
-    std::string name;
-    Fraction value;
-};
-
 template<class StackType>
 class Stack {
 private:

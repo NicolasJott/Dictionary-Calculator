@@ -1,6 +1,11 @@
 #include "dictionary.h"
 #include "stack.h"
 
+struct Value{
+    std::string name;
+    Fraction value;
+};
+
 Stack<Value> numStack;
 Stack<char> opStack;
 Dictionary dictionary;
@@ -102,8 +107,11 @@ void Evaluate(std::string s) {
    while (opStack.peek() != '$'){                                                   // Will call doOperation() until top of opStack is == '$';
        doOperation();
    }
-   Value output = numStack.pop();
-   std::cout << "Result: " <<  output.value << std::endl;
+   number.name = "";
+   number.value = 0;
+   number = numStack.pop();
+
+   std::cout << "Result: " <<  number.value << std::endl;
 }
 
 int main() {
