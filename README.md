@@ -1,6 +1,6 @@
 # Dictionary Calculator
 This program functions as a calculator that takes input as full mathematical expressions using the 4 basic arithmetic operators (+-*/).
-## Please Note
+## Consider the following
 This program is able to process a sequence of valid arithmetic expressions that include the following:
 <ul>
   <li>All numbers are non-negative integers</li>
