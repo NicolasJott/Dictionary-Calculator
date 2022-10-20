@@ -36,3 +36,11 @@ x / y
 Output
 17 / 2
 </pre>
+
+### Example
+<pre>
+Input
+z = 18 - (2 * 3)
+Output
+12 / 1
+
