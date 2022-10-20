@@ -18,3 +18,21 @@ x = 20 + (y=3)
 Output
 23 / 1
 </pre>
+
+### Example
+<pre>
+Input
+x = 17
+Output 
+17 / 1
+
+Input
+y = 2
+Output
+2 / 1
+
+Input
+x / y
+Output
+17 / 2
+</pre>
